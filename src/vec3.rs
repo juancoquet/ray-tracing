@@ -154,6 +154,16 @@ fn dot(v1: Vec3, v2: Vec3) -> f32 {
     v1.v[0] * v2.v[0] + v1.v[1] * v2.v[1] + v1.v[2] * v2.v[2]
 }
 
+fn cross(v1: Vec3, v2: Vec3) -> Vec3 {
+    Vec3 {
+        v: [
+            v1.v[1] * v2.v[2] - v1.v[2] * v2.v[1],
+            v1.v[2] * v2.v[0] - v1.v[0] * v2.v[2],
+            v1.v[0] * v2.v[1] - v1.v[1] * v2.v[0],
+        ],
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -338,6 +348,20 @@ mod tests {
         let v2 = Vec3 { v: [x, y, z] };
         let exp = a * x + b * y + c * z;
         let res = dot(v1, v2);
+
+        assert_eq!(exp, res);
+    }
+
+    #[test]
+    fn test_cross() {
+        let (a, b, c) = (4.0, 5.0, 6.0);
+        let (x, y, z) = (1.0, 2.0, 3.0);
+        let v1 = Vec3 { v: [a, b, c] };
+        let v2 = Vec3 { v: [x, y, z] };
+        let exp = Vec3 {
+            v: [b * z - c * y, c * x - a * z, a * y - b * x],
+        };
+        let res = cross(v1, v2);
 
         assert_eq!(exp, res);
     }

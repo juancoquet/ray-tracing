@@ -1,9 +1,16 @@
+mod vec3;
+mod point;
+
 use std::fs::File;
 use std::io::Write;
+use vec3::Vec3;
+use point::Point;
 
-mod vec3;
 
 fn main() {
+    let v = Vec3::new(1.0, 2.0, 3.0);
+    let point = Point::new(4.0, 5.0, 6.0);
+
     let width = 256;
     let height = 256;
 

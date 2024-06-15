@@ -1,27 +1,27 @@
 #[derive(Debug)]
 pub struct Vec3 {
-    v: [f32; 3],
+    v: [f64; 3],
 }
 
 impl Vec3 {
-    pub fn new(x: f32, y: f32, z: f32) -> Self {
+    pub fn new(x: f64, y: f64, z: f64) -> Self {
         Vec3 { v: [x, y, z] }
     }
 
-    pub fn x(&self) -> f32 {
+    pub fn x(&self) -> f64 {
         self.v[0]
     }
-    pub fn y(&self) -> f32 {
+    pub fn y(&self) -> f64 {
         self.v[1]
     }
-    pub fn z(&self) -> f32 {
+    pub fn z(&self) -> f64 {
         self.v[2]
     }
 
-    pub fn len(&self) -> f32 {
+    pub fn len(&self) -> f64 {
         self.len_sq().sqrt()
     }
-    pub fn len_sq(&self) -> f32 {
+    pub fn len_sq(&self) -> f64 {
         self.v[0] * self.v[0] + self.v[1] * self.v[1] + self.v[2] * self.v[2]
     }
 
@@ -91,17 +91,17 @@ impl std::ops::AddAssign for Vec3 {
     }
 }
 
-impl std::ops::Mul<f32> for Vec3 {
+impl std::ops::Mul<f64> for Vec3 {
     type Output = Self;
-    fn mul(self, other: f32) -> Self {
+    fn mul(self, other: f64) -> Self {
         Vec3 {
             v: [self.v[0] * other, self.v[1] * other, self.v[2] * other],
         }
     }
 }
 
-impl std::ops::MulAssign<f32> for Vec3 {
-    fn mul_assign(&mut self, other: f32) {
+impl std::ops::MulAssign<f64> for Vec3 {
+    fn mul_assign(&mut self, other: f64) {
         self.v[0] *= other;
         self.v[1] *= other;
         self.v[2] *= other;
@@ -121,9 +121,9 @@ impl std::ops::Mul<Vec3> for Vec3 {
     }
 }
 
-impl std::ops::Div<f32> for Vec3 {
+impl std::ops::Div<f64> for Vec3 {
     type Output = Vec3;
-    fn div(self, other: f32) -> Vec3 {
+    fn div(self, other: f64) -> Vec3 {
         // use the reciprocal of the divisor to avoid division as division is more expensive than
         // multiplication
         let reciprocal = 1.0 / other;
@@ -137,8 +137,8 @@ impl std::ops::Div<f32> for Vec3 {
     }
 }
 
-impl std::ops::DivAssign<f32> for Vec3 {
-    fn div_assign(&mut self, other: f32) {
+impl std::ops::DivAssign<f64> for Vec3 {
+    fn div_assign(&mut self, other: f64) {
         // use the reciprocal of the divisor to avoid division as division is more expensive than
         // multiplication
         let reciprocal = 1.0 / other;
@@ -149,19 +149,19 @@ impl std::ops::DivAssign<f32> for Vec3 {
 }
 
 impl std::ops::Index<usize> for Vec3 {
-    type Output = f32;
-    fn index(&self, i: usize) -> &f32 {
+    type Output = f64;
+    fn index(&self, i: usize) -> &f64 {
         &self.v[i]
     }
 }
 
 impl std::ops::IndexMut<usize> for Vec3 {
-    fn index_mut(&mut self, i: usize) -> &mut f32 {
+    fn index_mut(&mut self, i: usize) -> &mut f64 {
         &mut self.v[i]
     }
 }
 
-fn dot(v1: Vec3, v2: Vec3) -> f32 {
+fn dot(v1: Vec3, v2: Vec3) -> f64 {
     v1.v[0] * v2.v[0] + v1.v[1] * v2.v[1] + v1.v[2] * v2.v[2]
 }
 
@@ -256,7 +256,7 @@ mod tests {
     }
 
     #[test]
-    fn test_mul_f32() {
+    fn test_mul_f64() {
         let (a, b, c) = (4.0, 5.0, 6.0);
         let x = 2.0;
         let v = Vec3 { v: [a, b, c] };
@@ -269,7 +269,7 @@ mod tests {
     }
 
     #[test]
-    fn test_mul_assign_f32() {
+    fn test_mul_assign_f64() {
         let (a, b, c) = (4.0, 5.0, 6.0);
         let x = 2.0;
         let mut v = Vec3 { v: [a, b, c] };

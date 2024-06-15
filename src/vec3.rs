@@ -44,6 +44,14 @@ impl std::ops::Sub for Vec3 {
     }
 }
 
+impl std::ops::AddAssign for Vec3 {
+    fn add_assign(&mut self, other: Self) {
+        self.v[0] += other.v[0];
+        self.v[1] += other.v[1];
+        self.v[2] += other.v[2];
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -80,5 +88,19 @@ mod tests {
         let res = v1 - v2;
 
         assert_eq!(exp, res);
+    }
+
+    #[test]
+    fn test_add_assign() {
+        let (a, b, c) = (4.0, 5.0, 6.0);
+        let (x, y, z) = (1.0, 2.0, 3.0);
+        let mut v1 = Vec3 { v: [a, b, c] };
+        let v2 = Vec3 { v: [x, y, z] };
+        let exp = Vec3 {
+            v: [a + x, b + y, c + z],
+        };
+        v1 += v2;
+
+        assert_eq!(exp, v1);
     }
 }

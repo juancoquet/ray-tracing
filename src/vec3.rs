@@ -80,6 +80,15 @@ impl std::ops::AddAssign for Vec3 {
     }
 }
 
+impl std::ops::Mul<f32> for Vec3 {
+    type Output = Self;
+    fn mul(self, other: f32) -> Self {
+        Vec3 {
+            v: [self.v[0] * other, self.v[1] * other, self.v[2] * other],
+        }
+    }
+}
+
 impl std::ops::MulAssign<f32> for Vec3 {
     fn mul_assign(&mut self, other: f32) {
         self.v[0] *= other;
@@ -193,7 +202,20 @@ mod tests {
     }
 
     #[test]
-    fn test_mul_assign() {
+    fn test_mul_f32() {
+        let (a, b, c) = (4.0, 5.0, 6.0);
+        let x = 2.0;
+        let v = Vec3 { v: [a, b, c] };
+        let exp = Vec3 {
+            v: [a * x, b * x, c * x],
+        };
+        let res = v * x;
+
+        assert_eq!(exp, res);
+    }
+
+    #[test]
+    fn test_mul_assign_f32() {
         let (a, b, c) = (4.0, 5.0, 6.0);
         let x = 2.0;
         let mut v = Vec3 { v: [a, b, c] };

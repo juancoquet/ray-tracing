@@ -18,8 +18,8 @@ fn main() {
             let ig = (255.999 * g) as i32;
             let ib = (255.999 * b) as i32;
 
-            let row = format!("{} {} {}\n", ir, ig, ib);
-            out.push_str(row.as_str())
+            let pixel = format!("{} {} {}\n", ir, ig, ib);
+            out.push_str(pixel.as_str())
         }
     }
 

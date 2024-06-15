@@ -78,6 +78,19 @@ impl std::ops::DivAssign<f32> for Vec3 {
     }
 }
 
+impl std::ops::Index<usize> for Vec3 {
+    type Output = f32;
+    fn index(&self, i: usize) -> &f32 {
+        &self.v[i]
+    }
+}
+
+impl std::ops::IndexMut<usize> for Vec3 {
+    fn index_mut(&mut self, i: usize) -> &mut f32 {
+        &mut self.v[i]
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -164,5 +177,25 @@ mod tests {
         let res = v.len_sq();
 
         assert_eq!(exp, res);
+    }
+
+    #[test]
+    fn test_index() {
+        let (x, y, z) = (1.0, 2.0, 3.0);
+        let v = Vec3 { v: [x, y, z] };
+
+        assert_eq!(x, v[0]);
+        assert_eq!(y, v[1]);
+        assert_eq!(z, v[2]);
+    }
+
+    #[test]
+    fn test_index_mut() {
+        let (x, y, z) = (1.0, 2.0, 3.0);
+        let mut v = Vec3 { v: [x, y, z] };
+        let exp = 4.0;
+        v[0] = exp;
+
+        assert_eq!(exp, v[0]);
     }
 }

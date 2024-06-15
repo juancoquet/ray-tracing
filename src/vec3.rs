@@ -110,6 +110,22 @@ impl std::ops::Mul<Vec3> for Vec3 {
     }
 }
 
+impl std::ops::Div<f32> for Vec3 {
+    type Output = Vec3;
+    fn div(self, other: f32) -> Vec3 {
+        // use the reciprocal of the divisor to avoid division as division is more expensive than
+        // multiplication
+        let reciprocal = 1.0 / other;
+        Vec3 {
+            v: [
+                self.v[0] * reciprocal,
+                self.v[1] * reciprocal,
+                self.v[2] * reciprocal,
+            ],
+        }
+    }
+}
+
 impl std::ops::DivAssign<f32> for Vec3 {
     fn div_assign(&mut self, other: f32) {
         // use the reciprocal of the divisor to avoid division as division is more expensive than
@@ -250,6 +266,19 @@ mod tests {
             v: [a * x, b * y, c * z],
         };
         let res = v1 * v2;
+
+        assert_eq!(exp, res);
+    }
+
+    #[test]
+    fn test_div() {
+        let (a, b, c) = (4.0, 5.0, 6.0);
+        let x = 2.0;
+        let v = Vec3 { v: [a, b, c] };
+        let exp = Vec3 {
+            v: [a / x, b / x, c / x],
+        };
+        let res = v / x;
 
         assert_eq!(exp, res);
     }

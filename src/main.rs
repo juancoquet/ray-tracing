@@ -1,6 +1,8 @@
 use std::fs::File;
 use std::io::Write;
 
+mod vec3;
+
 fn main() {
     let width = 256;
     let height = 256;

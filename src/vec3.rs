@@ -25,6 +25,25 @@ impl PartialEq for Vec3 {
     }
 }
 
+impl Default for Vec3 {
+    fn default() -> Self {
+        Vec3 { v: [0.0, 0.0, 0.0] }
+    }
+}
+
+impl std::ops::Sub for Vec3 {
+    type Output = Self;
+    fn sub(self, other: Self) -> Self {
+        Vec3 {
+            v: [
+                self.v[0] - other.v[0],
+                self.v[1] - other.v[1],
+                self.v[2] - other.v[2],
+            ],
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -47,5 +66,19 @@ mod tests {
         assert_eq!(x, vx);
         assert_eq!(y, vy);
         assert_eq!(z, vz);
+    }
+
+    #[test]
+    fn test_sub() {
+        let (a, b, c) = (4.0, 5.0, 6.0);
+        let (x, y, z) = (1.0, 2.0, 3.0);
+        let v1 = Vec3 { v: [a, b, c] };
+        let v2 = Vec3 { v: [x, y, z] };
+        let exp = Vec3 {
+            v: [a - x, b - y, c - z],
+        };
+        let res = v1 - v2;
+
+        assert_eq!(exp, res);
     }
 }

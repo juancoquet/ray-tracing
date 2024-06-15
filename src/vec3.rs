@@ -52,6 +52,14 @@ impl std::ops::AddAssign for Vec3 {
     }
 }
 
+impl std::ops::MulAssign<f32> for Vec3 {
+    fn mul_assign(&mut self, other: f32) {
+        self.v[0] *= other;
+        self.v[1] *= other;
+        self.v[2] *= other;
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -102,5 +110,18 @@ mod tests {
         v1 += v2;
 
         assert_eq!(exp, v1);
+    }
+
+    #[test]
+    fn test_mul_assign() {
+        let (a, b, c) = (4.0, 5.0, 6.0);
+        let x = 2.0;
+        let mut v = Vec3 { v: [a, b, c] };
+        let exp = Vec3 {
+            v: [a * x, b * x, c * x],
+        };
+        v *= x;
+
+        assert_eq!(exp, v);
     }
 }

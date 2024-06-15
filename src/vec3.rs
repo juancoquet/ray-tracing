@@ -97,6 +97,19 @@ impl std::ops::MulAssign<f32> for Vec3 {
     }
 }
 
+impl std::ops::Mul<Vec3> for Vec3 {
+    type Output = Vec3;
+    fn mul(self, other: Vec3) -> Vec3 {
+        Vec3 {
+            v: [
+                self.v[0] * other.v[0],
+                self.v[1] * other.v[1],
+                self.v[2] * other.v[2],
+            ],
+        }
+    }
+}
+
 impl std::ops::DivAssign<f32> for Vec3 {
     fn div_assign(&mut self, other: f32) {
         // use the reciprocal of the divisor to avoid division as division is more expensive than
@@ -225,6 +238,20 @@ mod tests {
         v *= x;
 
         assert_eq!(exp, v);
+    }
+
+    #[test]
+    fn test_mul_vec3() {
+        let (a, b, c) = (4.0, 5.0, 6.0);
+        let (x, y, z) = (1.0, 2.0, 3.0);
+        let v1 = Vec3 { v: [a, b, c] };
+        let v2 = Vec3 { v: [x, y, z] };
+        let exp = Vec3 {
+            v: [a * x, b * y, c * z],
+        };
+        let res = v1 * v2;
+
+        assert_eq!(exp, res);
     }
 
     #[test]

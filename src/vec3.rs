@@ -24,6 +24,17 @@ impl Vec3 {
     pub fn len_sq(&self) -> f32 {
         self.v[0] * self.v[0] + self.v[1] * self.v[1] + self.v[2] * self.v[2]
     }
+
+    pub fn unit(&self) -> Vec3 {
+        let reciprocal = 1.0 / self.len();
+        Vec3 {
+            v: [
+                self.v[0] * reciprocal,
+                self.v[1] * reciprocal,
+                self.v[2] * reciprocal,
+            ],
+        }
+    }
 }
 
 impl PartialEq for Vec3 {
@@ -362,6 +373,19 @@ mod tests {
             v: [b * z - c * y, c * x - a * z, a * y - b * x],
         };
         let res = cross(v1, v2);
+
+        assert_eq!(exp, res);
+    }
+
+    #[test]
+    fn test_unit() {
+        let (x, y, z) = (1.0, 2.0, 3.0);
+        let v = Vec3 { v: [x, y, z] };
+        let len = v.len();
+        let exp = Vec3 {
+            v: [x / len, y / len, z / len],
+        };
+        let res = v.unit();
 
         assert_eq!(exp, res);
     }

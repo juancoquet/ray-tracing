@@ -83,6 +83,19 @@ impl std::ops::Add for Vec3 {
     }
 }
 
+impl<'a, 'b> std::ops::Add<&'b Vec3> for &'a Vec3 {
+    type Output = Vec3;
+    fn add(self, other: &'b Vec3) -> Vec3 {
+        Vec3 {
+            v: [
+                self.v[0] + other.v[0],
+                self.v[1] + other.v[1],
+                self.v[2] + other.v[2],
+            ],
+        }
+    }
+}
+
 impl std::ops::AddAssign for Vec3 {
     fn add_assign(&mut self, other: Self) {
         self.v[0] += other.v[0];
@@ -96,6 +109,16 @@ impl std::ops::Mul<f64> for Vec3 {
     fn mul(self, other: f64) -> Self {
         Vec3 {
             v: [self.v[0] * other, self.v[1] * other, self.v[2] * other],
+        }
+    }
+}
+
+// Mul for Vec3 reference
+impl<'a> std::ops::Mul<f64> for &'a Vec3 {
+    type Output = Vec3;
+    fn mul(self, scalar: f64) -> Vec3 {
+        Vec3 {
+            v: [self.v[0] * scalar, self.v[1] * scalar, self.v[2] * scalar],
         }
     }
 }

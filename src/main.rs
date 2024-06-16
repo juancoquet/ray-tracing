@@ -1,6 +1,7 @@
 mod color;
 mod point;
 mod vec3;
+mod ray;
 
 use color::{write_color, Color};
 use point::Point;

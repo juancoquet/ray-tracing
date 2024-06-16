@@ -1,30 +1,54 @@
 mod color;
 mod point;
-mod vec3;
 mod ray;
+mod vec3;
 
-use color::{write_color, Color};
+use color::write_color;
 use point::Point;
+use ray::Ray;
+use std::cmp::max;
 use std::fs::File;
 use std::io::Write;
 use vec3::Vec3;
 
 fn main() {
-    let width = 256;
-    let height = 256;
+    let aspect_ratio = 16.0 / 9.0;
+    let image_width = 400;
+    let provisional_height = (image_width as f64 / aspect_ratio) as i32;
+    let image_height = max(provisional_height, 1);
+
+    let focal_length = 1.0; // distance between the camera centre and the centre of the viewport
+    let viewport_height = 2.0;
+    let viewport_width = viewport_height * (image_width as f64 / image_height as f64);
+    let camera_centre = Point::new(0.0, 0.0, 0.0);
+
+    // vectors across the horizontal and vertical space of the viewport
+    let viewport_u = Vec3::new(viewport_width, 0.0, 0.0);
+    let viewport_v = Vec3::new(0.0, -viewport_height, 0.0);
+
+    // horizontal and vertical delta vectors between pixels; the distance between pixels in the
+    // viewport
+    let pixel_delta_u = &viewport_u / image_width as f64;
+    let pixel_delta_v = &viewport_v / image_height as f64;
+
+    // location of the top-left pixel. piexels should be inset by 1/2 * delta_v/delta_u
+    let viewport_centre = &camera_centre - &Vec3::new(0.0, 0.0, focal_length);
+    let viewport_top_left = viewport_centre - viewport_u / 2.0 - viewport_v / 2.0;
+    let top_left_pixel_loc = viewport_top_left + (&pixel_delta_u + &pixel_delta_v) * 0.5;
 
     let mut out = String::new();
-    out.push_str(format!("P3\n{} {}\n255\n", width, height).as_str());
+    out.push_str(format!("P3\n{} {}\n255\n", image_width, image_height).as_str());
 
-    for j in 0..height {
-        print!("\r{}", progress_bar(j, height));
-        for i in 0..width {
-            let pixel = Color::new(
-                i as f64 / (height as f64 - 1.0),
-                j as f64 / (height as f64 - 1.0),
-                0.0,
-            );
-            out.push_str(write_color(&pixel).as_str());
+    for y in 0..image_height {
+        print!("\r{}", progress_bar(y, image_height));
+        for x in 0..image_width {
+            let pixel_centre =
+                &top_left_pixel_loc + &(&pixel_delta_u * x as f64) + (&pixel_delta_v * y as f64);
+            let ray_direction = &pixel_centre - &camera_centre;
+            let origin = Point::new(camera_centre.x(), camera_centre.y(), camera_centre.z());
+            let ray = Ray::new(origin, ray_direction);
+            let pixel_color = ray.color();
+            out.push_str(write_color(&pixel_color).as_str());
         }
     }
 

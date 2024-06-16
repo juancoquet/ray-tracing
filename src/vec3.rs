@@ -62,6 +62,19 @@ impl std::ops::Sub for Vec3 {
     }
 }
 
+impl<'a, 'b> std::ops::Sub<&'b Vec3> for &'a Vec3 {
+    type Output = Vec3;
+    fn sub(self, other: &'b Vec3) -> Vec3 {
+        Vec3 {
+            v: [
+                self.v[0] - other.v[0],
+                self.v[1] - other.v[1],
+                self.v[2] - other.v[2],
+            ],
+        }
+    }
+}
+
 impl std::ops::SubAssign for Vec3 {
     fn sub_assign(&mut self, other: Self) {
         self.v[0] -= other.v[0];
@@ -145,6 +158,22 @@ impl std::ops::Mul<Vec3> for Vec3 {
 }
 
 impl std::ops::Div<f64> for Vec3 {
+    type Output = Vec3;
+    fn div(self, other: f64) -> Vec3 {
+        // use the reciprocal of the divisor to avoid division as division is more expensive than
+        // multiplication
+        let reciprocal = 1.0 / other;
+        Vec3 {
+            v: [
+                self.v[0] * reciprocal,
+                self.v[1] * reciprocal,
+                self.v[2] * reciprocal,
+            ],
+        }
+    }
+}
+
+impl<'a> std::ops::Div<f64> for &'a Vec3 {
     type Output = Vec3;
     fn div(self, other: f64) -> Vec3 {
         // use the reciprocal of the divisor to avoid division as division is more expensive than

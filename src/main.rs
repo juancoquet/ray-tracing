@@ -1,16 +1,14 @@
-mod vec3;
+mod color;
 mod point;
+mod vec3;
 
+use color::{write_color, Color};
+use point::Point;
 use std::fs::File;
 use std::io::Write;
 use vec3::Vec3;
-use point::Point;
-
 
 fn main() {
-    let v = Vec3::new(1.0, 2.0, 3.0);
-    let point = Point::new(4.0, 5.0, 6.0);
-
     let width = 256;
     let height = 256;
 
@@ -20,16 +18,12 @@ fn main() {
     for j in 0..height {
         print!("\r{}", progress_bar(j, height));
         for i in 0..width {
-            let r = i as f32 / (height as f32 - 1.0);
-            let g = j as f32 / (height as f32 - 1.0);
-            let b = 0.0;
-
-            let ir = (255.999 * r) as i32;
-            let ig = (255.999 * g) as i32;
-            let ib = (255.999 * b) as i32;
-
-            let pixel = format!("{} {} {}\n", ir, ig, ib);
-            out.push_str(pixel.as_str());
+            let pixel = Color::new(
+                i as f64 / (height as f64 - 1.0),
+                j as f64 / (height as f64 - 1.0),
+                0.0,
+            );
+            out.push_str(write_color(&pixel).as_str());
         }
     }
 
@@ -39,8 +33,8 @@ fn main() {
 
 fn progress_bar(curr: i32, of: i32) -> String {
     let width = 80;
-    let percent = curr as f32 / of as f32;
-    let fill = (percent * width as f32) as i32;
+    let percent = curr as f64 / of as f64;
+    let fill = (percent * width as f64) as i32;
     let empty = width - fill;
     format!(
         "[{}{}] {}%",

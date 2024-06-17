@@ -1,8 +1,8 @@
-use crate::{color::Color, point::Point, vec3::Vec3};
+use crate::{color::Color, hit_sphere, point::Point, vec3::Vec3};
 
 pub struct Ray {
-    origin: Point,
-    direction: Vec3,
+    pub origin: Point,
+    pub direction: Vec3,
 }
 
 impl Ray {
@@ -18,6 +18,10 @@ impl Ray {
     }
 
     pub fn color(&self) -> Color {
+        let sphere_centre = Point::new(0.0, 0.0, -1.0);
+        if hit_sphere(&sphere_centre, 0.5, &self) {
+            return Color::new(1.0, 0.0, 0.0);
+        }
         let direction_unit = self.direction.unit();
         // `a` is a value in the range [0,1] based on the direction_unit's y component
         let a = 0.5 * (direction_unit.y() + 1.0);

@@ -213,7 +213,7 @@ impl std::ops::IndexMut<usize> for Vec3 {
     }
 }
 
-fn dot(v1: Vec3, v2: Vec3) -> f64 {
+pub fn dot(v1: &Vec3, v2: &Vec3) -> f64 {
     v1.v[0] * v2.v[0] + v1.v[1] * v2.v[1] + v1.v[2] * v2.v[2]
 }
 

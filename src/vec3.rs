@@ -22,7 +22,7 @@ impl Vec3 {
         self.len_sq().sqrt()
     }
     pub fn len_sq(&self) -> f64 {
-        self.v[0] * self.v[0] + self.v[1] * self.v[1] + self.v[2] * self.v[2]
+        dot(self, self)
     }
 
     pub fn unit(&self) -> Vec3 {

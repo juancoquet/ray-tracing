@@ -11,7 +11,8 @@ impl Ray {
     }
 
     // Given a scalar value `t`, returns the point along the ray reached by traversing its direction
-    // in proportion to the scalar
+    // in proportion to the scalar.
+    // P(t) = A + tB
     pub fn at(&self, t: f64) -> Point {
         let scale = &self.direction * t;
         &self.origin + &scale

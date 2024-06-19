@@ -410,7 +410,7 @@ mod tests {
         let v1 = Vec3 { v: [a, b, c] };
         let v2 = Vec3 { v: [x, y, z] };
         let exp = a * x + b * y + c * z;
-        let res = dot(v1, v2);
+        let res = dot(&v1, &v2);
 
         assert_eq!(exp, res);
     }

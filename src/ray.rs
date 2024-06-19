@@ -19,8 +19,11 @@ impl Ray {
 
     pub fn color(&self) -> Color {
         let sphere_centre = Point::new(0.0, 0.0, -1.0);
-        if hit_sphere(&sphere_centre, 0.5, &self) {
-            return Color::new(1.0, 0.0, 0.0);
+        let t = hit_sphere(&sphere_centre, 0.5, &self);
+        if t > 0.0 { // hit
+            let hit_point = self.at(t);
+            let normal = hit_point - sphere_centre;
+            return Color::new(normal.x() + 1.0, normal.y() + 1.0, normal.z() + 1.0) * 0.5;
         }
         let direction_unit = self.direction.unit();
         // `a` is a value in the range [0,1] based on the direction_unit's y component

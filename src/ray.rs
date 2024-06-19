@@ -35,7 +35,7 @@ impl Ray {
 }
 
 /// Linear blend/linear interpolation/lerp
-/// Takes some value `a` in the range [0,1] and start & end values. Calculates the value that
+/// Takes some value `a` in the range `[0,1]` and start & end values. Calculates the value that
 /// pertains to `a` when placed in the gradient between start & end.
 fn lerp(a: f64, start_value: &Color, end_value: &Color) -> Color {
     start_value * (1.0 - a) + end_value * a

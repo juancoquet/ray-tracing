@@ -71,13 +71,13 @@ fn progress_bar(curr: i32, of: i32) -> String {
 
 fn hit_sphere(sphere_centre: &Point, radius: f64, ray: &Ray) -> f64 {
     let oc = sphere_centre - &ray.origin;
-    let a = dot(&ray.direction, &ray.direction);
-    let b = -2.0 * dot(&ray.direction, &oc);
-    let c = &dot(&oc, &oc) - &radius * radius;
-    let discriminant = &b * &b - 4.0 * &a * &c;
+    let a = ray.direction.len_sq();
+    let h = dot(&ray.direction, &oc);
+    let c = oc.len_sq() - radius * radius;
+    let discriminant = h * h - a * c;
     if discriminant < 0.0 {
         -1.0
     } else {
-        (-b - discriminant.sqrt()) / (2.0 * a)
+        (h - discriminant.sqrt()) / a
     }
 }

@@ -1,6 +1,7 @@
 mod color;
 mod hit_record;
 mod hittable;
+mod interval;
 mod point;
 mod ray;
 mod sphere;

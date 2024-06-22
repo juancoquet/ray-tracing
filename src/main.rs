@@ -7,6 +7,8 @@ mod sphere;
 mod vec3;
 
 use color::write_color;
+use hit_record::HitRecord;
+use hittable::Hittable;
 use point::Point;
 use ray::Ray;
 use std::cmp::max;
@@ -102,4 +104,23 @@ fn hit_sphere(sphere_centre: &Point, radius: f64, ray: &Ray) -> f64 {
     } else {
         (h - discriminant.sqrt()) / a
     }
+}
+
+fn hit_any(
+    hittables: &[&dyn Hittable],
+    ray: &Ray,
+    ray_t_min: f64,
+    ray_t_max: f64,
+) -> Option<HitRecord> {
+    let mut curr_closest = ray_t_max;
+    let mut hit_record: Option<HitRecord> = None;
+
+    for h in hittables {
+        let hit_option = h.hit(ray, ray_t_min, curr_closest);
+        if let Some(hit) = hit_option {
+            curr_closest = hit.t;
+            hit_record = Some(hit)
+        }
+    }
+    hit_record
 }

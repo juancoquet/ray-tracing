@@ -8,6 +8,13 @@ impl Interval {
         Interval { min, max }
     }
 
+    pub fn empty() -> Self {
+        Interval {
+            min: std::f64::INFINITY,
+            max: -std::f64::INFINITY,
+        }
+    }
+
     pub fn size(&self) -> f64 {
         self.max - self.min
     }

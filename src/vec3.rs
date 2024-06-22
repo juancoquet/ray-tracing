@@ -83,6 +83,15 @@ impl std::ops::SubAssign for Vec3 {
     }
 }
 
+impl std::ops::Neg for Vec3 {
+    type Output = Self;
+    fn neg(self) -> Self {
+        Vec3 {
+            v: [-self.v[0], -self.v[1], -self.v[2]],
+        }
+    }
+}
+
 impl std::ops::Add for Vec3 {
     type Output = Self;
     fn add(self, other: Self) -> Self {

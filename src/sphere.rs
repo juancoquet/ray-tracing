@@ -51,8 +51,14 @@ impl Hittable for Sphere {
 
         let t = root;
         let point = ray.at(t);
-        let normal = (&point - &self.centre) / self.radius;
+        let outward_normal_unit = (&point - &self.centre) / self.radius;
+        let front_face = dot(&ray.direction, &outward_normal_unit) < 0.0;
+        let normal = if front_face {
+            outward_normal_unit
+        } else {
+            -outward_normal_unit
+        };
 
-        Some(HitRecord::new(point, normal, t))
+        Some(HitRecord::new(point, normal, t, front_face))
     }
 }

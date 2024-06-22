@@ -11,4 +11,8 @@ impl Interval {
     pub fn size(&self) -> f64 {
         self.max - self.min
     }
+
+    pub fn contains(&self, value: f64) -> bool {
+        self.min < value && value < self.max
+    }
 }

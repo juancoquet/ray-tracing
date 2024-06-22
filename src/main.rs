@@ -11,6 +11,7 @@ use hit_record::HitRecord;
 use hittable::Hittable;
 use point::Point;
 use ray::Ray;
+use sphere::Sphere;
 use std::cmp::max;
 use std::fs::File;
 use std::io::Write;
@@ -22,6 +23,12 @@ fn main() {
     let provisional_height = (image_width as f64 / aspect_ratio) as i32;
     let image_height = max(provisional_height, 1);
 
+    // world
+    let sph1 = Sphere::new(Point::new(0.0, 0.0, -1.0), 0.5);
+    let sph2 = Sphere::new(Point::new(0.0, -100.5, -1.0), 100.0);
+    let hittables: [&dyn Hittable; 2] = [&sph1, &sph2];
+
+    // camera
     let focal_length = 1.0; // distance between the camera centre and the centre of the viewport
     let viewport_height = 2.0;
     let viewport_width = viewport_height * (image_width as f64 / image_height as f64);
@@ -52,7 +59,7 @@ fn main() {
             let ray_direction = &pixel_centre - &camera_centre;
             let origin = Point::new(camera_centre.x(), camera_centre.y(), camera_centre.z());
             let ray = Ray::new(origin, ray_direction);
-            let pixel_color = ray.color();
+            let pixel_color = ray.color(&hittables);
             out.push_str(write_color(&pixel_color).as_str());
         }
     }
@@ -72,38 +79,6 @@ fn progress_bar(curr: i32, of: i32) -> String {
         " ".repeat(empty as usize),
         (percent * 100.0) as i32
     )
-}
-
-/**
-The equation for a sphere centered at point `C = (Cx, Cy, Cz)` with radius `r` is:
-`(Cx - Px)^2 + (Cy - Py)^2 + (Cz - Pz)^2 = r^2`
-where `P` is a point `(Px, Py, Pz)` on the sphere and `C` is the center of the sphere.
-That is to say, any point `P` that satisfies the above equation *is on the surface of the sphere*.
-Given that the vector from `P` to `C` is `(C - P)`, i.e., `(Cx - Px, Cy - Py, Cz - Pz)`:
-`(C - P) = (Cx - Px, Cy - Py, Cz - Pz)`
-(Note that the magnitude of `(C - P)` is `r`)
-Then the dot product of `(C - P)` with itself is:
-`(C - P) ⋅ (C - P) = (Cx - Px, Cy - Py, Cz - Pz) ⋅ (Cx - Px, Cy - Py, Cz - Pz)`
-`(C - P) ⋅ (C - P) = (Cx - Px)^2 + (Cy - Py)^2 + (Cz - Pz)^2`
-Note that the right-hand side is the same as the definition of `r^2`, so:
-`(C - P) ⋅ (C - P) = r^2`
-Thus, any point `P` which satisfies the above equation is on the surface of the sphere.
-
----
-Given some ray and some sphere, we'd like to know if any point along that ray is on the surface
-of the sphere.
-*/
-fn hit_sphere(sphere_centre: &Point, radius: f64, ray: &Ray) -> f64 {
-    let oc = sphere_centre - &ray.origin;
-    let a = ray.direction.len_sq();
-    let h = dot(&ray.direction, &oc);
-    let c = oc.len_sq() - radius * radius;
-    let discriminant = h * h - a * c;
-    if discriminant < 0.0 {
-        -1.0
-    } else {
-        (h - discriminant.sqrt()) / a
-    }
 }
 
 fn hit_any(

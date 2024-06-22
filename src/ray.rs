@@ -1,4 +1,4 @@
-use crate::{color::Color, hit_sphere, hittable::Hittable, point::Point, vec3::Vec3};
+use crate::{color::Color, hit_any, hit_sphere, hittable::Hittable, point::Point, vec3::Vec3};
 
 pub struct Ray {
     pub origin: Point,
@@ -18,15 +18,16 @@ impl Ray {
         &self.origin + &scale
     }
 
-    pub fn color(&self, hittable: &dyn Hittable) -> Color {
-        let hit_option = hittable.hit(&self, 0.0, std::f64::INFINITY);
+    pub fn color(&self, hittables: &[&dyn Hittable]) -> Color {
         let white = Color::new(1.0, 1.0, 1.0);
         let blue = Color::new(0.5, 0.7, 1.0);
 
+        let hit_option = hit_any(hittables, &self, 0.0, std::f64::INFINITY);
         if let Some(hit) = hit_option {
             let shade = &hit.normal + &white;
             return shade * 0.5;
         }
+
         let direction_unit = self.direction.unit();
         // `a` is a value in the range [0,1] based on the direction_unit's y component
         let a = 0.5 * (direction_unit.y() + 1.0);

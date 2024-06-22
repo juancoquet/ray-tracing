@@ -1,4 +1,4 @@
-use crate::{color::Color, hit_sphere, point::Point, vec3::Vec3};
+use crate::{color::Color, hit_sphere, hittable::Hittable, point::Point, vec3::Vec3};
 
 pub struct Ray {
     pub origin: Point,
@@ -18,19 +18,18 @@ impl Ray {
         &self.origin + &scale
     }
 
-    pub fn color(&self) -> Color {
-        let sphere_centre = Point::new(0.0, 0.0, -1.0);
-        let t = hit_sphere(&sphere_centre, 0.5, &self);
-        if t > 0.0 { // hit
-            let hit_point = self.at(t);
-            let normal = hit_point - sphere_centre;
-            return Color::new(normal.x() + 1.0, normal.y() + 1.0, normal.z() + 1.0) * 0.5;
+    pub fn color(&self, hittable: &dyn Hittable) -> Color {
+        let hit_option = hittable.hit(&self, 0.0, std::f64::INFINITY);
+        let white = Color::new(1.0, 1.0, 1.0);
+        let blue = Color::new(0.5, 0.7, 1.0);
+
+        if let Some(hit) = hit_option {
+            let shade = &hit.normal + &white;
+            return shade * 0.5;
         }
         let direction_unit = self.direction.unit();
         // `a` is a value in the range [0,1] based on the direction_unit's y component
         let a = 0.5 * (direction_unit.y() + 1.0);
-        let white = Color::new(1.0, 1.0, 1.0);
-        let blue = Color::new(0.5, 0.7, 1.0);
         lerp(a, &white, &blue)
     }
 }

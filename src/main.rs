@@ -70,9 +70,9 @@ fn progress_bar(curr: i32, of: i32) -> String {
 }
 
 /**
-The equation for a sphere centered at point `(Cx, Cy, Cz)` with radius `r` is:
+The equation for a sphere centered at point `C = (Cx, Cy, Cz)` with radius `r` is:
 `(Cx - Px)^2 + (Cy - Py)^2 + (Cz - Pz)^2 = r^2`
-where `P` is a point on the sphere and `C` is the center of the sphere.
+where `P` is a point `(Px, Py, Pz)` on the sphere and `C` is the center of the sphere.
 That is to say, any point `P` that satisfies the above equation *is on the surface of the sphere*.
 Given that the vector from `P` to `C` is `(C - P)`, i.e., `(Cx - Px, Cy - Py, Cz - Pz)`:
 `(C - P) = (Cx - Px, Cy - Py, Cz - Pz)`

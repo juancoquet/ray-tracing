@@ -15,7 +15,7 @@ use sphere::Sphere;
 use std::cmp::max;
 use std::fs::File;
 use std::io::Write;
-use vec3::{dot, Vec3};
+use vec3::Vec3;
 
 fn main() {
     let aspect_ratio = 16.0 / 9.0;

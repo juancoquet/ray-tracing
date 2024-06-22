@@ -1,5 +1,6 @@
 use crate::{
-    color::Color, hit_any, hittable::Hittable, interval::Interval, point::Point, vec3::Vec3,
+    color::Color, hit_record::HitRecord, hittable::Hittable, interval::Interval, point::Point,
+    vec3::Vec3,
 };
 
 pub struct Ray {
@@ -42,4 +43,18 @@ impl Ray {
 /// pertains to `a` when placed in the gradient between start & end.
 fn lerp(a: f64, start_value: &Color, end_value: &Color) -> Color {
     start_value * (1.0 - a) + end_value * a
+}
+
+fn hit_any(hittables: &[&dyn Hittable], ray: &Ray, ray_t: Interval) -> Option<HitRecord> {
+    let mut curr_closest = ray_t.max;
+    let mut hit_record: Option<HitRecord> = None;
+
+    for h in hittables {
+        let hit_option = h.hit(ray, Interval::new(ray_t.min, curr_closest));
+        if let Some(hit) = hit_option {
+            curr_closest = hit.t;
+            hit_record = Some(hit)
+        }
+    }
+    hit_record
 }

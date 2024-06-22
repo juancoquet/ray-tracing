@@ -83,20 +83,6 @@ fn progress_bar(curr: i32, of: i32) -> String {
     )
 }
 
-fn hit_any(hittables: &[&dyn Hittable], ray: &Ray, ray_t: Interval) -> Option<HitRecord> {
-    let mut curr_closest = ray_t.max;
-    let mut hit_record: Option<HitRecord> = None;
-
-    for h in hittables {
-        let hit_option = h.hit(ray, Interval::new(ray_t.min, curr_closest));
-        if let Some(hit) = hit_option {
-            curr_closest = hit.t;
-            hit_record = Some(hit)
-        }
-    }
-    hit_record
-}
-
 fn deg_to_radians(degrees: f64) -> f64 {
     degrees * std::f64::consts::PI / 180.0
 }

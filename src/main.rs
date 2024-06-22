@@ -1,6 +1,9 @@
 mod color;
+mod hit_record;
+mod hittable;
 mod point;
 mod ray;
+mod sphere;
 mod vec3;
 
 use color::write_color;

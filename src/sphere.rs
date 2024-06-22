@@ -1,4 +1,7 @@
-use crate::{hit_record::HitRecord, hittable::Hittable, point::Point, ray::Ray, vec3::dot};
+use crate::{
+    hit_record::HitRecord, hittable::Hittable, interval::Interval, point::Point, ray::Ray,
+    vec3::dot,
+};
 
 pub struct Sphere {
     centre: Point,
@@ -31,7 +34,7 @@ impl Hittable for Sphere {
     Given some ray and some sphere, we'd like to know if any point along that ray is on the surface
     of the sphere.
     */
-    fn hit(&self, ray: &Ray, ray_t_min: f64, ray_t_max: f64) -> Option<HitRecord> {
+    fn hit(&self, ray: &Ray, ray_t: Interval) -> Option<HitRecord> {
         let oc = &self.centre - &ray.origin;
         let a = ray.direction.len_sq();
         let h = dot(&ray.direction, &oc);
@@ -45,7 +48,7 @@ impl Hittable for Sphere {
 
         // find the nearest root that lies within the acceptable t range
         let root = (h - discriminant_sqrt) / a;
-        if root <= ray_t_min || ray_t_max <= root {
+        if !ray_t.surrounds(root) {
             return None;
         }
 

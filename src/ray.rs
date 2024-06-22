@@ -1,4 +1,6 @@
-use crate::{color::Color, hit_any, hit_sphere, hittable::Hittable, point::Point, vec3::Vec3};
+use crate::{
+    color::Color, hit_any, hittable::Hittable, interval::Interval, point::Point, vec3::Vec3,
+};
 
 pub struct Ray {
     pub origin: Point,
@@ -22,7 +24,7 @@ impl Ray {
         let white = Color::new(1.0, 1.0, 1.0);
         let blue = Color::new(0.5, 0.7, 1.0);
 
-        let hit_option = hit_any(hittables, &self, 0.0, std::f64::INFINITY);
+        let hit_option = hit_any(hittables, &self, Interval::new(0.0, std::f64::INFINITY));
         if let Some(hit) = hit_option {
             let shade = &hit.normal + &white;
             return shade * 0.5;

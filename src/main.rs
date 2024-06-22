@@ -10,6 +10,7 @@ mod vec3;
 use color::write_color;
 use hit_record::HitRecord;
 use hittable::Hittable;
+use interval::Interval;
 use point::Point;
 use ray::Ray;
 use sphere::Sphere;
@@ -82,17 +83,12 @@ fn progress_bar(curr: i32, of: i32) -> String {
     )
 }
 
-fn hit_any(
-    hittables: &[&dyn Hittable],
-    ray: &Ray,
-    ray_t_min: f64,
-    ray_t_max: f64,
-) -> Option<HitRecord> {
-    let mut curr_closest = ray_t_max;
+fn hit_any(hittables: &[&dyn Hittable], ray: &Ray, ray_t: Interval) -> Option<HitRecord> {
+    let mut curr_closest = ray_t.max;
     let mut hit_record: Option<HitRecord> = None;
 
     for h in hittables {
-        let hit_option = h.hit(ray, ray_t_min, curr_closest);
+        let hit_option = h.hit(ray, Interval::new(ray_t.min, curr_closest));
         if let Some(hit) = hit_option {
             curr_closest = hit.t;
             hit_record = Some(hit)

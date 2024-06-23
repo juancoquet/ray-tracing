@@ -21,7 +21,12 @@ impl Ray {
         &self.origin + &scale
     }
 
-    pub fn color(&self, hittables: &[&dyn Hittable]) -> Color {
+    pub fn color(&self, hittables: &[&dyn Hittable], max_reflections: i32) -> Color {
+        if max_reflections <= 0 {
+            // Once we've hit the maximum number of reflections, contribute no more light to the
+            // scene
+            return Color::new(0.0, 0.0, 0.0);
+        }
         let white = Color::new(1.0, 1.0, 1.0);
         let blue = Color::new(0.5, 0.7, 1.0);
 
@@ -29,7 +34,7 @@ impl Ray {
         if let Some(hit) = hit_option {
             let reflection_direction = Vec3::random_on_hemisphere(&hit.normal);
             let reflection_ray = Ray::new(hit.point, reflection_direction);
-            let reflection_color = reflection_ray.color(hittables);
+            let reflection_color = reflection_ray.color(hittables, max_reflections - 1);
             return reflection_color * 0.5;
         }
 

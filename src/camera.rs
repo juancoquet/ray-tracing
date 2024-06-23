@@ -18,7 +18,7 @@ pub struct Camera {
 }
 
 impl Camera {
-    pub fn render(&mut self, hittables: &[&dyn Hittable]) -> String {
+    pub fn render(&mut self, hittables: &[&dyn Hittable], reflection_depth: i32) -> String {
         let mut ppm = String::new();
         ppm.push_str(format!("P3\n{} {}\n255\n", self.image_width, self.image_height).as_str());
 
@@ -30,7 +30,7 @@ impl Camera {
                 let mut pixel_color = Color::new(0.0, 0.0, 0.0);
                 for _ in 0..self.pixel_samples {
                     let ray = self.get_offset_ray(x, y);
-                    pixel_color += ray.color(hittables);
+                    pixel_color += ray.color(hittables, reflection_depth);
                 }
                 let scale = 1.0 / self.pixel_samples as f64;
                 pixel_color *= scale;
@@ -102,12 +102,13 @@ impl Default for Camera {
 fn progress_bar(curr: i32, of: i32) -> String {
     let width = 80;
     let percent = curr as f64 / of as f64;
-    let fill = (percent * width as f64) as i32;
+    let fill = ((percent * width as f64) - 1.0) as usize;
     let empty = width - fill;
     format!(
-        "[{}{}] {}%",
+        "[{}{}{}] {}%",
         "=".repeat(fill as usize),
-        " ".repeat(empty as usize),
+        ">",
+        "·".repeat(empty as usize),
         (percent * 100.0) as i32
     )
 }

@@ -16,7 +16,7 @@ use std::fs::File;
 use std::io::Write;
 
 fn main() {
-    let camera = Camera::default();
+    let mut camera = Camera::default();
 
     let sph1 = Sphere::new(Point::new(0.0, 0.0, -1.0), 0.5);
     let sph2 = Sphere::new(Point::new(0.0, -100.5, -1.0), 100.0);

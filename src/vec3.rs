@@ -1,3 +1,5 @@
+use core::panic;
+
 use rand::Rng;
 
 use crate::interval::Interval;
@@ -25,6 +27,15 @@ impl Vec3 {
         let y = interval.clamp(rng.gen());
         let z = interval.clamp(rng.gen());
         Vec3 { v: [x, y, z] }
+    }
+
+    pub fn random_in_unit_sphere() -> Self {
+        loop {
+            let p = Vec3::random();
+            if p.len_sq() < 1.0 {
+                return p;
+            }
+        }
     }
 
     pub fn x(&self) -> f64 {

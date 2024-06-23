@@ -1,3 +1,2 @@
-mod material;
-
+pub mod material;
 pub mod lambertian;

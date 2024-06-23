@@ -1,8 +1,4 @@
-use crate::{
-    material::{self, Material},
-    point::Point,
-    vec3::Vec3,
-};
+use crate::{materials::material::Material, point::Point, vec3::Vec3};
 
 pub struct HitRecord<'a> {
     pub point: Point,

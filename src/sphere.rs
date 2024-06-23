@@ -1,5 +1,5 @@
 use crate::{
-    hit_record::HitRecord, hittable::Hittable, interval::Interval, material::Material,
+    hit_record::HitRecord, hittable::Hittable, interval::Interval, materials::material::Material,
     point::Point, ray::Ray, vec3::dot,
 };
 

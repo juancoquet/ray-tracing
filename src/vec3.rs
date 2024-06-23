@@ -69,6 +69,12 @@ impl Vec3 {
             ],
         }
     }
+
+    /// Returns true if the Vec3 is close to zero in all dimensions
+    pub fn is_near_zero(&self) -> bool {
+        let s = 0.00000001;
+        self.x().abs() < s && self.y().abs() < s && self.z().abs() < s
+    }
 }
 
 impl PartialEq for Vec3 {

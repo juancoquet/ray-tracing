@@ -33,7 +33,8 @@ impl Camera {
                     let ray = self.get_offset_ray(x, y);
                     pixel_color += ray.color(&hittables);
                 }
-
+                let scale = 1.0 / self.pixel_samples as f64;
+                pixel_color *= scale;
                 ppm.push_str(write_color(&pixel_color).as_str());
             }
         }

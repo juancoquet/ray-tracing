@@ -1,3 +1,7 @@
+use rand::Rng;
+
+use crate::interval::Interval;
+
 #[derive(Debug)]
 pub struct Vec3 {
     v: [f64; 3],
@@ -5,6 +9,21 @@ pub struct Vec3 {
 
 impl Vec3 {
     pub fn new(x: f64, y: f64, z: f64) -> Self {
+        Vec3 { v: [x, y, z] }
+    }
+
+    pub fn random() -> Self {
+        let mut rng = rand::thread_rng();
+        Vec3 {
+            v: [rng.gen(), rng.gen(), rng.gen()],
+        }
+    }
+
+    pub fn random_clamped(interval: Interval) -> Self {
+        let mut rng = rand::thread_rng();
+        let x = interval.clamp(rng.gen());
+        let y = interval.clamp(rng.gen());
+        let z = interval.clamp(rng.gen());
         Vec3 { v: [x, y, z] }
     }
 

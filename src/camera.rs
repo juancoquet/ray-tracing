@@ -31,7 +31,7 @@ impl Camera {
                 let mut pixel_color = Color::new(0.0, 0.0, 0.0);
                 for _ in 0..self.pixel_samples {
                     let ray = self.get_offset_ray(x, y);
-                    pixel_color += ray.color(&hittables);
+                    pixel_color += ray.color(hittables);
                 }
                 let scale = 1.0 / self.pixel_samples as f64;
                 pixel_color *= scale;

@@ -1,6 +1,6 @@
 use crate::{
-    color::Color, hit_record::HitRecord, hittable::Hittable, interval::Interval, point::Point,
-    vec3::Vec3,
+    color::Color, hit_record::HitRecord, hittable::Hittable, interval::Interval,
+    point::Point, vec3::Vec3,
 };
 
 pub struct Ray {
@@ -32,10 +32,8 @@ impl Ray {
 
         let hit_option = hit_any(hittables, self, Interval::new(0.001, std::f64::INFINITY));
         if let Some(hit) = hit_option {
-            let reflection_direction = &hit.normal + &Vec3::random_unit();
-            let reflection_ray = Ray::new(hit.point, reflection_direction);
-            let reflection_color = reflection_ray.color(hittables, max_reflections - 1);
-            return reflection_color * 0.5;
+            let (scattered_ray, reflection_color) = hit.material.scatter(&self, &hit);
+            return reflection_color * scattered_ray.color(hittables, max_reflections - 1);
         }
 
         let direction_unit = self.direction.unit();

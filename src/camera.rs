@@ -38,6 +38,7 @@ impl Camera {
             }
         }
 
+        print!("\r");
         ppm
     }
 

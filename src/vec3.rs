@@ -14,15 +14,16 @@ impl Vec3 {
         Vec3 { v: [x, y, z] }
     }
 
-    pub fn random_unit() -> Self {
-        Vec3::random_in_unit_sphere().unit()
+    pub fn random_on_hemisphere(normal: &Vec3) -> Self {
+        let unit = Vec3::random_unit();
+        if dot(&unit, &normal) > 0.0 {
+            return unit; // exists in the same hemisphere as the normal
+        }
+        return -unit; // flip it if not
     }
 
-    fn random() -> Self {
-        let mut rng = rand::thread_rng();
-        Vec3 {
-            v: [rng.gen(), rng.gen(), rng.gen()],
-        }
+    fn random_unit() -> Self {
+        Vec3::random_in_unit_sphere().unit()
     }
 
     fn random_clamped(interval: &Interval) -> Self {

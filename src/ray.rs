@@ -27,8 +27,10 @@ impl Ray {
 
         let hit_option = hit_any(hittables, self, Interval::new(0.0, std::f64::INFINITY));
         if let Some(hit) = hit_option {
-            let shade = &hit.normal + &white;
-            return shade * 0.5;
+            let reflection_direction = Vec3::random_on_hemisphere(&hit.normal);
+            let reflection_ray = Ray::new(hit.point, reflection_direction);
+            let reflection_color = reflection_ray.color(hittables);
+            return reflection_color * 0.5;
         }
 
         let direction_unit = self.direction.unit();

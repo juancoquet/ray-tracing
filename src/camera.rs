@@ -1,10 +1,9 @@
-use std::{cmp::max, fs::File};
+use std::cmp::max;
 
 use rand::{rngs::ThreadRng, Rng};
 
 use crate::{
-    color::Color, hittable::Hittable, interval::Interval, point::Point, ray::Ray, sphere::Sphere,
-    vec3::Vec3,
+    color::Color, hittable::Hittable, interval::Interval, point::Point, ray::Ray, vec3::Vec3,
 };
 
 pub struct Camera {

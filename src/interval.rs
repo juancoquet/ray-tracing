@@ -41,6 +41,6 @@ impl Interval {
         if value > self.max {
             return self.max;
         }
-        return value;
+        value
     }
 }

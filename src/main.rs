@@ -10,7 +10,9 @@ mod sphere;
 mod vec3;
 
 use camera::Camera;
+use color::Color;
 use hittable::Hittable;
+use materials::lambertian::Lambertian;
 use point::Point;
 use sphere::Sphere;
 use std::fs::File;
@@ -18,6 +20,11 @@ use std::io::Write;
 
 fn main() {
     let mut camera = Camera::default();
+
+    let material_floor = Lambertian::new(Color::new(0.8, 0.8, 0.8));
+    let material_centre = Lambertian::new(Color::new(0.1, 0.2, 0.5));
+    let material_left = Lambertian::new(Color::new(0.8, 0.8, 0.8));
+    let material_right = Lambertian::new(Color::new(0.8, 0.6, 0.2));
 
     let sph1 = Sphere::new(Point::new(0.0, 0.0, -1.0), 0.5);
     let sph2 = Sphere::new(Point::new(0.0, -100.5, -1.0), 100.0);

@@ -21,7 +21,7 @@ impl Vec3 {
         }
     }
 
-    pub fn random_clamped(interval: Interval) -> Self {
+    pub fn random_clamped(interval: &Interval) -> Self {
         let mut rng = rand::thread_rng();
         let x = interval.clamp(rng.gen());
         let y = interval.clamp(rng.gen());
@@ -30,8 +30,9 @@ impl Vec3 {
     }
 
     pub fn random_in_unit_sphere() -> Self {
+        let min_max = Interval::new(-1.0, 1.0);
         loop {
-            let p = Vec3::random();
+            let p = Vec3::random_clamped(&min_max);
             if p.len_sq() < 1.0 {
                 return p;
             }

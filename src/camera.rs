@@ -19,20 +19,21 @@ pub struct Camera {
 }
 
 impl Camera {
-    pub fn render(&self, hittables: &[&dyn Hittable]) -> String {
+    pub fn render(&mut self, hittables: &[&dyn Hittable]) -> String {
         let mut ppm = String::new();
         ppm.push_str(format!("P3\n{} {}\n255\n", self.image_width, self.image_height).as_str());
 
         for y in 0..self.image_height {
             print!("\r{}", progress_bar(y, self.image_height));
             for x in 0..self.image_width {
-                let pixel_centre = &self.top_left_pixel_loc
-                    + &(&self.pixel_delta_u * x as f64)
-                    + (&self.pixel_delta_v * y as f64);
-                let ray_direction = &pixel_centre - &self.centre;
-                let origin = Point::new(self.centre.x(), self.centre.y(), self.centre.z());
-                let ray = Ray::new(origin, ray_direction);
-                let pixel_color = ray.color(&hittables);
+                // start the pixel as black, and we'll aggregate the values of each pixel sample
+                // into it
+                let mut pixel_color = Color::new(0.0, 0.0, 0.0);
+                for _ in 0..self.pixel_samples {
+                    let ray = self.get_offset_ray(x, y);
+                    pixel_color += ray.color(&hittables);
+                }
+
                 ppm.push_str(write_color(&pixel_color).as_str());
             }
         }
@@ -42,7 +43,7 @@ impl Camera {
 
     /// Returns a Ray originating at the camera centre and passing through a randomly smapled point
     /// around the pixel located at (x, y)
-    fn get_ray_for_pixel(&mut self, x: i32, y: i32) -> Ray {
+    fn get_offset_ray(&mut self, x: i32, y: i32) -> Ray {
         // get a random offset in the pixel's unit square, bound by `pixel_delta_u/v`
         let offset_y: f64 = self.rng.gen_range(-0.5..0.5);
         let offset_x: f64 = self.rng.gen_range(-0.5..0.5);

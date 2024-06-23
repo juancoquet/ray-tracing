@@ -20,7 +20,7 @@ impl Vec3 {
         return -unit; // flip it if not
     }
 
-    fn random_unit() -> Self {
+    pub fn random_unit() -> Self {
         Vec3::random_in_unit_sphere().unit()
     }
 

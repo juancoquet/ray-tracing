@@ -32,7 +32,7 @@ impl Ray {
 
         let hit_option = hit_any(hittables, self, Interval::new(0.001, std::f64::INFINITY));
         if let Some(hit) = hit_option {
-            let reflection_direction = Vec3::random_on_hemisphere(&hit.normal);
+            let reflection_direction = &hit.normal + &Vec3::random_unit();
             let reflection_ray = Ray::new(hit.point, reflection_direction);
             let reflection_color = reflection_ray.color(hittables, max_reflections - 1);
             return reflection_color * 0.5;

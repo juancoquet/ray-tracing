@@ -1,5 +1,7 @@
 use std::{cmp::max, fs::File};
 
+use rand::{rngs::ThreadRng, Rng};
+
 use crate::{
     color::Color, hittable::Hittable, interval::Interval, point::Point, ray::Ray, sphere::Sphere,
     vec3::Vec3,
@@ -12,6 +14,8 @@ pub struct Camera {
     top_left_pixel_loc: Point,
     pixel_delta_u: Vec3,
     pixel_delta_v: Vec3,
+    pixel_samples: i32,
+    rng: ThreadRng,
 }
 
 impl Camera {
@@ -34,6 +38,22 @@ impl Camera {
         }
 
         ppm
+    }
+
+    /// Returns a Ray originating at the camera centre and passing through a randomly smapled point
+    /// around the pixel located at (x, y)
+    fn get_ray_for_pixel(&mut self, x: i32, y: i32) -> Ray {
+        // get a random offset in the pixel's unit square, bound by `pixel_delta_u/v`
+        let offset_y: f64 = self.rng.gen_range(-0.5..0.5);
+        let offset_x: f64 = self.rng.gen_range(-0.5..0.5);
+
+        let pixel_sample = &self.top_left_pixel_loc
+            + &(&self.pixel_delta_u * (x as f64 + offset_x))
+            + (&self.pixel_delta_v * (y as f64 + offset_y));
+
+        let ray_origin = Point::new(self.centre.x(), self.centre.y(), self.centre.z());
+        let ray_direction = &pixel_sample - &self.centre;
+        Ray::new(ray_origin, ray_direction)
     }
 }
 
@@ -71,6 +91,8 @@ impl Default for Camera {
             top_left_pixel_loc,
             pixel_delta_u,
             pixel_delta_v,
+            pixel_samples: 10,
+            rng: rand::thread_rng(),
         }
     }
 }
@@ -88,7 +110,7 @@ fn progress_bar(curr: i32, of: i32) -> String {
     )
 }
 
-pub fn write_color(pixel_color: &Color) -> String {
+fn write_color(pixel_color: &Color) -> String {
     let r = pixel_color.x();
     let g = pixel_color.y();
     let b = pixel_color.z();

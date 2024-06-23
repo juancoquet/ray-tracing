@@ -25,7 +25,7 @@ impl Ray {
         let white = Color::new(1.0, 1.0, 1.0);
         let blue = Color::new(0.5, 0.7, 1.0);
 
-        let hit_option = hit_any(hittables, &self, Interval::new(0.0, std::f64::INFINITY));
+        let hit_option = hit_any(hittables, self, Interval::new(0.0, std::f64::INFINITY));
         if let Some(hit) = hit_option {
             let shade = &hit.normal + &white;
             return shade * 0.5;

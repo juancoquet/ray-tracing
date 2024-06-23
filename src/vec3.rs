@@ -14,14 +14,18 @@ impl Vec3 {
         Vec3 { v: [x, y, z] }
     }
 
-    pub fn random() -> Self {
+    pub fn random_unit() -> Self {
+        Vec3::random_in_unit_sphere().unit()
+    }
+
+    fn random() -> Self {
         let mut rng = rand::thread_rng();
         Vec3 {
             v: [rng.gen(), rng.gen(), rng.gen()],
         }
     }
 
-    pub fn random_clamped(interval: &Interval) -> Self {
+    fn random_clamped(interval: &Interval) -> Self {
         let mut rng = rand::thread_rng();
         let x = interval.clamp(rng.gen());
         let y = interval.clamp(rng.gen());
@@ -29,7 +33,7 @@ impl Vec3 {
         Vec3 { v: [x, y, z] }
     }
 
-    pub fn random_in_unit_sphere() -> Self {
+    fn random_in_unit_sphere() -> Self {
         let min_max = Interval::new(-1.0, 1.0);
         loop {
             let p = Vec3::random_clamped(&min_max);

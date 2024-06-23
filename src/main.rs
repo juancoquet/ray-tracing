@@ -3,6 +3,7 @@ mod color;
 mod hit_record;
 mod hittable;
 mod interval;
+mod material;
 mod point;
 mod ray;
 mod sphere;

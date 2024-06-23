@@ -75,6 +75,12 @@ impl Vec3 {
         let s = 0.00000001;
         self.x().abs() < s && self.y().abs() < s && self.z().abs() < s
     }
+
+    pub fn reflect(&self, normal: &Vec3) -> Vec3 {
+        let projection = normal * dot(self, &normal);
+        let bb = projection * 2.0;
+        self - &bb
+    }
 }
 
 impl PartialEq for Vec3 {

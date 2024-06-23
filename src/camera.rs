@@ -1,6 +1,9 @@
 use std::{cmp::max, fs::File};
 
-use crate::{color::Color, hittable::Hittable, point::Point, ray::Ray, sphere::Sphere, vec3::Vec3};
+use crate::{
+    color::Color, hittable::Hittable, interval::Interval, point::Point, ray::Ray, sphere::Sphere,
+    vec3::Vec3,
+};
 
 pub struct Camera {
     image_width: i32,
@@ -86,9 +89,13 @@ fn progress_bar(curr: i32, of: i32) -> String {
 }
 
 pub fn write_color(pixel_color: &Color) -> String {
+    let r = pixel_color.x();
+    let g = pixel_color.y();
+    let b = pixel_color.z();
     // translate the pixel's color value from the range [0, 1] -> [0, 255]
-    let rbyte = (255.999 * pixel_color.x()) as i32;
-    let gbyte = (255.999 * pixel_color.y()) as i32;
-    let bbyte = (255.999 * pixel_color.z()) as i32;
+    let intensity = Interval::new(0.0, 0.999);
+    let rbyte = (256.0 * intensity.clamp(r)) as i32;
+    let gbyte = (256.0 * intensity.clamp(g)) as i32;
+    let bbyte = (256.0 * intensity.clamp(b)) as i32;
     format!("{} {} {}\n", rbyte, gbyte, bbyte)
 }

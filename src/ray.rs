@@ -1,6 +1,6 @@
 use crate::{
     color::Color, hit_record::HitRecord, hittable::Hittable, interval::Interval, point::Point,
-    vec3::Vec3,
+    sphere::Sphere, vec3::Vec3,
 };
 
 pub struct Ray {

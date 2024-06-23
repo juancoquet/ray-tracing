@@ -1,4 +1,4 @@
-use crate::{point::Point, ray::Ray, vec3::Vec3};
+use crate::{point::Point, vec3::Vec3};
 
 pub struct HitRecord {
     pub point: Point,

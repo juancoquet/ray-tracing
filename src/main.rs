@@ -22,7 +22,7 @@ fn main() {
     let sph2 = Sphere::new(Point::new(0.0, -100.5, -1.0), 100.0);
     let hittables: [&dyn Hittable; 2] = [&sph1, &sph2];
 
-    let reflection_depth = 10;
+    let reflection_depth = 50;
     let ppm = camera.render(&hittables, reflection_depth);
 
     let mut file = File::create("image.ppm").unwrap();

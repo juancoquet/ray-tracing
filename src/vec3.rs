@@ -1,5 +1,3 @@
-use core::panic;
-
 use rand::Rng;
 
 use crate::interval::Interval;

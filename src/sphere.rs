@@ -38,7 +38,7 @@ impl Hittable for Sphere {
         let oc = &self.centre - &ray.origin;
         let a = ray.direction.len_sq();
         let h = dot(&ray.direction, &oc);
-        let c = oc.len_sq() - &self.radius * &self.radius;
+        let c = oc.len_sq() - self.radius * self.radius;
         let discriminant = h * h - a * c;
         if discriminant < 0.0 {
             return None;

@@ -52,7 +52,11 @@ fn lerp(a: f64, start_value: &Color, end_value: &Color) -> Color {
     start_value * (1.0 - a) + end_value * a
 }
 
-fn hit_any(hittables: &[&dyn Hittable], ray: &Ray, ray_t: Interval) -> Option<HitRecord> {
+fn hit_any<'a>(
+    hittables: &'a [&dyn Hittable],
+    ray: &Ray,
+    ray_t: Interval,
+) -> Option<HitRecord<'a>> {
     let mut curr_closest = ray_t.max;
     let mut hit_record: Option<HitRecord> = None;
 

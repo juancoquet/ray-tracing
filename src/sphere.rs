@@ -1,20 +1,25 @@
 use crate::{
-    hit_record::HitRecord, hittable::Hittable, interval::Interval, point::Point, ray::Ray,
-    vec3::dot,
+    hit_record::HitRecord, hittable::Hittable, interval::Interval, material::Material,
+    point::Point, ray::Ray, vec3::dot,
 };
 
-pub struct Sphere {
+pub struct Sphere<'a> {
     centre: Point,
     radius: f64,
+    material: &'a dyn Material,
 }
 
-impl Sphere {
-    pub fn new(centre: Point, radius: f64) -> Self {
-        Sphere { centre, radius }
+impl<'a> Sphere<'a> {
+    pub fn new(centre: Point, radius: f64, material: &'a dyn Material) -> Self {
+        Sphere {
+            centre,
+            radius,
+            material,
+        }
     }
 }
 
-impl Hittable for Sphere {
+impl<'a> Hittable for Sphere<'a> {
     /**
     The equation for a sphere centered at point `C = (Cx, Cy, Cz)` with radius `r` is:
     `(Cx - Px)^2 + (Cy - Py)^2 + (Cz - Pz)^2 = r^2`
@@ -62,6 +67,6 @@ impl Hittable for Sphere {
             -outward_normal_unit
         };
 
-        Some(HitRecord::new(point, normal, t, front_face))
+        Some(HitRecord::new(point, normal, t, front_face, self.material))
     }
 }

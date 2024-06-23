@@ -92,7 +92,7 @@ impl Default for Camera {
             top_left_pixel_loc,
             pixel_delta_u,
             pixel_delta_v,
-            pixel_samples: 10,
+            pixel_samples: 100,
             rng: rand::thread_rng(),
         }
     }
